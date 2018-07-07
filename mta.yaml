@@ -1,0 +1,36 @@
+ID: HANA_APP
+_schema-version: '2.1'
+modules:
+ - name: HANA_APP_appRouter
+   type: javascript.nodejs
+   parameters:
+      disk-quota: 256M
+      memory: 256M
+   build-parameters:
+      builder: grunt
+      type: '%appRouter%'
+   requires:
+    - name: rt_HANA_APP_appRouter
+ - name: HANA_APPui_deployer
+   type: com.sap.html5.application-content
+   parameters:
+      path: deployer
+   build-parameters:
+      type: com.sap.html5.application-content
+      builder: grunt
+   requires:
+    - name: dt_HANA_APP_appRouter
+parameters:
+   deploy_mode: html5-repo
+resources:
+ - name: rt_HANA_APP_appRouter
+   parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+ - name: dt_HANA_APP_appRouter
+   parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+version: 0.0.1
